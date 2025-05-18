@@ -1,6 +1,8 @@
 package com.webserver.async;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 
 import com.webserver.util.Logger;
@@ -15,14 +17,30 @@ public class HandlerThread extends ServerThread {
         super(sharedResource, threadController);
     }
 
+    private void readInput() throws IOException{
+        BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        String request = reader.readLine();
+        if(request == null){
+            Logger.log("Empty request received", LogLevel.WARNING);
+            reader.close();
+            throw new IOException();
+        }
+        Logger.log("[REQUEST] client message: " + request, LogLevel.INFO);
+    }
+
     @Override
     protected void task(){
-        Logger.log("Handler Thread started", LogLevel.INFO);
+        Logger.log("Handler Thread started, id: " + id, LogLevel.INFO);
         while(taskRunning){
-            Logger.log(String.format("Task %d is running\n", id), LogLevel.INFO);
-            stop();
+            try {
+                readInput();
+            } catch (IOException e) {
+                Logger.log(String.format("client %d unnexpectedly disconnected", id), LogLevel.CRITICAL);
+                stop();
+            }
         }
-        Logger.log(String.format("Task %d is stopping\n", id), LogLevel.INFO);
+        Logger.log(String.format("Task %d is stopping", id), LogLevel.INFO);
+        threadController.removeClientThread(id);
     }
 
     public void reset(){

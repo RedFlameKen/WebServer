@@ -1,6 +1,10 @@
 package com.webserver.async;
 
+import java.io.IOException;
 import java.net.Socket;
+
+import com.webserver.util.Logger;
+import com.webserver.util.Logger.LogLevel;
 
 public class ThreadController {
 
@@ -24,7 +28,23 @@ public class ThreadController {
      */
     public void startClientThread(Socket clientSocket){
         HandlerThread thread = handlerThreadPool.add(clientSocket);
+        if(thread == null){
+            Logger.log("The HandlerThreadPool is full! cancelling connection!", LogLevel.CRITICAL);
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
         thread.start();
+    }
+    
+    public void removeClientThread(int id){
+        if(handlerThreadPool.remove(id) == -1){
+            Logger.log("Could not remove HandlerThread from the pool, invalid ID!", LogLevel.CRITICAL);
+            return;
+        }
     }
 
     private void initThreads(){
