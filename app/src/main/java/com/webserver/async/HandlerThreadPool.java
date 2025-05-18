@@ -87,7 +87,7 @@ public class HandlerThreadPool {
     private int genThreadID(){
         int id = -1;
         do {
-            id = (int) Math.random() % 10000;
+            id = (int) (Math.random() * 10000);
         } while(id == -1 || !isIDAvailable(id));
         return id;
     }

@@ -21,8 +21,8 @@ public class HandlerThread extends ServerThread {
         while(taskRunning){
             Logger.log(String.format("Task %d is running\n", id), LogLevel.INFO);
             stop();
-            return;
         }
+        Logger.log(String.format("Task %d is stopping\n", id), LogLevel.INFO);
     }
 
     public void reset(){

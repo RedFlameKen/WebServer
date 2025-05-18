@@ -10,7 +10,9 @@ public class Network {
 
     public static ServerSocket createServerSocket(){
         try {
-            return new ServerSocket(PORT);
+            ServerSocket socket = new ServerSocket(PORT);
+            socket.setReuseAddress(true);
+            return socket;
         } catch (IOException e) {
             e.printStackTrace();
         }
