@@ -5,11 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import com.webserver.util.Logger;
+import static com.webserver.util.Logger.LogLevel.*;
 
-/* TODO:
- * Constantly execute accept()
- * hand off the client Socket created to the ThreadController
-*/
 public class ListenerThread extends ServerThread {
 
     public ListenerThread(SharedResource sharedResource, ThreadController threadController) {
@@ -18,9 +15,9 @@ public class ListenerThread extends ServerThread {
 
     @Override
     protected void task(){
-        System.out.printf("started listener thread\n");
+        Logger.log("started listener thread", INFO);
         while(taskRunning){
-            System.out.printf("listening for a client\n");
+            Logger.log("listening for a client", INFO);
 
             ServerSocket serverSocket = null;
 
@@ -33,11 +30,11 @@ public class ListenerThread extends ServerThread {
             try {
                 clientSocket = serverSocket.accept();
             } catch (IOException e) {
-                Logger.log("Unable to connect to client!", Logger.LogLevel.WARNING);
+                Logger.log("Unable to connect to client!", WARNING);
                 continue;
                 // e.printStackTrace();
             }
-            System.out.printf("client connected!\n");
+            Logger.log("client connected!", INFO);
             threadController.startClientThread(clientSocket);
         }
     }

@@ -3,6 +3,9 @@ package com.webserver.async;
 import java.io.IOException;
 import java.net.Socket;
 
+import com.webserver.util.Logger;
+import com.webserver.util.Logger.LogLevel;
+
 public class HandlerThread extends ServerThread {
 
     private Socket clientSocket;
@@ -14,9 +17,11 @@ public class HandlerThread extends ServerThread {
 
     @Override
     protected void task(){
+        Logger.log("Handler Thread started", LogLevel.INFO);
         while(taskRunning){
-            System.out.printf("Task %d is running\n", id);
+            Logger.log(String.format("Task %d is running\n", id), LogLevel.INFO);
             stop();
+            return;
         }
     }
 

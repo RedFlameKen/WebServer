@@ -11,6 +11,7 @@ public class Logger {
     public static void log(String message, LogLevel level){
         StringBuilder builder = new StringBuilder();
         builder.append(String.format("[%s] %s", level, message));
+        System.out.printf("%s\n", builder.toString());
     }
 
     public static String getLog(String message, LogLevel level){
