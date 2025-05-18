@@ -1,8 +1,11 @@
 package com.webserver;
 
+import com.webserver.server.ServerController;
+
 public class Main {
 
     public static void main(String[] args) {
-        System.out.printf("Hello, World!\n");
+        ServerController controller = new ServerController();
+        controller.start();
     }
 }
