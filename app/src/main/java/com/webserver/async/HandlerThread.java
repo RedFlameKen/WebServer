@@ -1,15 +1,13 @@
 package com.webserver.async;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
 import com.webserver.transaction.Transaction;
-import com.webserver.transaction.response.Response;
 import com.webserver.util.Logger;
 import com.webserver.util.Logger.LogLevel;
 
@@ -22,31 +20,27 @@ public class HandlerThread extends ServerThread {
         super(sharedResource, threadController);
     }
 
-    private String readInput() throws IOException{
-        BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+    private String readInput(BufferedReader reader) throws IOException{
         String receivedInput = reader.readLine();
         if(receivedInput == null){
             Logger.log("Empty request received", LogLevel.WARNING);
-            reader.close();
             throw new IOException();
         }
         // Logger.log("[REQUEST] client message: " + request, LogLevel.INFO);
         return receivedInput;
     }
 
-    /**
-     * handle the request then return a response json.
-     *
-     * @param jsonString the string input from the client. This is expected to be in
-     *                   the form of a json.
-     *
-     * @return response string in the form of a json
-     */
+    private void sendResponse(String jsonString) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+        writer.write(jsonString);
+        writer.flush();
+        writer.close();
+    }
+
     private String handleRequest(String jsonString){
-        JSONObject json = new JSONObject(new JSONTokener(jsonString));
-        Transaction transaction = new Transaction(sharedResource, json);
-        Response response = transaction.processRequest();
-        return response.getJSONString();
+        Transaction transaction = new Transaction(sharedResource);
+        String response = transaction.handleRequest(jsonString);
+        return response;
     }
 
     @Override
@@ -54,13 +48,22 @@ public class HandlerThread extends ServerThread {
         Logger.log("Handler Thread started, id: " + id, LogLevel.INFO);
         while(taskRunning){
             String input = null;
+            String response = null;
+            BufferedReader reader = null;
             try {
-                input = readInput();
+                reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                input = readInput(reader);
+                response = handleRequest(input);
+                sendResponse(response);
             } catch (IOException e) {
                 Logger.log(String.format("client %d unnexpectedly disconnected", id), LogLevel.CRITICAL);
-                stop();
             }
-            handleRequest(input);
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            stop();
         }
         Logger.log(String.format("Task %d is stopping", id), LogLevel.INFO);
         threadController.removeClientThread(id);
