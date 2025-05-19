@@ -1,20 +1,19 @@
 package com.webserver.async;
 
 import java.net.ServerSocket;
-import java.util.LinkedList;
 import java.util.concurrent.Semaphore;
 
-import com.webserver.transaction.Transaction;
+import com.webserver.db.DatabaseManager;
 
 public class SharedResource {
 
-    public LinkedList<Transaction> transactionQueue;
     public ServerSocket serverSocket;
     public Semaphore semaphore;
+    public DatabaseManager databaseManager;
 
-    public SharedResource(LinkedList<Transaction> transactionQueue, ServerSocket serverSocket, Semaphore semaphore) {
-        this.transactionQueue = transactionQueue;
+    public SharedResource(ServerSocket serverSocket, DatabaseManager databaseManager, Semaphore semaphore) {
         this.serverSocket = serverSocket;
+        this.databaseManager = databaseManager;
         this.semaphore = semaphore;
     }
 

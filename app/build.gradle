@@ -8,6 +8,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
+    id 'eclipse'
 }
 
 repositories {
@@ -21,6 +22,7 @@ dependencies {
 
     implementation libs.guava
     implementation "org.json:json:20240303"
+    implementation "com.mysql:mysql-connector-j:9.3.0"
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -33,4 +35,11 @@ java {
 application {
     // Define the main class for the application.
     mainClass = 'com.webserver.Main'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': application.mainClass
+        attributes 'Class-Path': "/home/kenneth/.gradle/caches/modules-2/files-2.1/org.json/json/20240303/1245e385b5212a5a1403458d23aebcf8b0a11463/json-20240303-sources.jar"
+    }
 }

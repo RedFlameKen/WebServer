@@ -18,6 +18,7 @@ public class HandlerThreadPool {
         activeThreads = new ArrayList<>(size);
         inactiveThreads = new ArrayList<>(size);
         this.threadController = threadController;
+        this.sharedResource = sharedResource;
         initPool();
     }
 
