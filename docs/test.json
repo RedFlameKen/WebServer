@@ -1,0 +1,11 @@
+{
+    "method": "POST",
+    "request-type": "SendMessage",
+    "url": "http://redflameken.tech",
+    "header" : {
+        "Content-Type": "application/json"
+    },
+    "body": {
+        "message": "Hello there!"
+    }
+}

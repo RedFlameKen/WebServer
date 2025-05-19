@@ -3,6 +3,7 @@
 ## Request Structure
 * Method
 * URL
+* RequestType
 * Headers
     - Content Type
     - Authorization
@@ -19,12 +20,12 @@
     - Content Type
     - Authorization
 * Body
-* Success
-* Message
-* Data
-    - createdAt (for POST)
-    - updatedAt (for PUT)
-    - deletedAt (for DELETE)
+    * Success
+    * Message
+    * Data
+        - createdAt (for POST)
+        - updatedAt (for PUT)
+        - deletedAt (for DELETE)
 
 > [!NOTE]
 > Is content type even needed?
