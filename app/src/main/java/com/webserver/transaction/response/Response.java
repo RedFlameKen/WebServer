@@ -18,7 +18,7 @@ public class Response {
         JSONObject json = new JSONObject();
         json.put("status", status);
         json.put("statusText", ResponseCode.getResponseCodeText(status));
-        json.put("header", header.getJSONObject().toString());
+        json.put("header", header.getJSONObject());
         json.put("body", body);
         return json.toString();
     }
