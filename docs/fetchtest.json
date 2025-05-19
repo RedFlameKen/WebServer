@@ -1,0 +1,10 @@
+{
+    "method": "GET",
+    "request-type": "FetchMessages",
+    "url": "http://redflameken.tech",
+    "header" : {
+        "Content-Type": "application/json"
+    },
+    "body": {
+    }
+}

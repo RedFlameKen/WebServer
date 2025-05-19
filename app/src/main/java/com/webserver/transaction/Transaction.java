@@ -9,6 +9,7 @@ import org.json.JSONTokener;
 import com.webserver.async.SharedResource;
 import com.webserver.transaction.request.Request;
 import com.webserver.transaction.request.RequestBuilder;
+import com.webserver.transaction.request.handlers.FetchMessagesRequestHandler;
 import com.webserver.transaction.request.handlers.RequestHandler;
 import com.webserver.transaction.request.handlers.SendMessageRequestHandler;
 import com.webserver.transaction.response.Response;
@@ -71,7 +72,7 @@ public class Transaction {
     public RequestHandler getRequestHandler(){
         switch (request.getType()) {
             case FETCH_MESSAGES_REQUEST:
-                return null;
+                return new FetchMessagesRequestHandler(request);
             case SEND_MESSAGE_REQUEST:
                 return new SendMessageRequestHandler(request);
             case UNDEFINED:
