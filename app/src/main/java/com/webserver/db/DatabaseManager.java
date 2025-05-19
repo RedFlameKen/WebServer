@@ -84,6 +84,9 @@ public class DatabaseManager {
         return 0;
     }
 
+    /**
+     * Set the DB_NAME as the used database
+     */
     public void useDatabase(){
         execute("use " + DB_NAME);
     }
@@ -107,6 +110,12 @@ public class DatabaseManager {
         return prep;
     }
 
+    /**
+     * Executes a simple sql command.
+     *
+     * @param command the SQL command to run
+     *
+     */
     public void execute(String command){
         try {
             Statement stmt = connection.createStatement();
