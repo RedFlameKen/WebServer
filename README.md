@@ -16,13 +16,18 @@ gradle.bat build
 ```
 
 ## Running 
-The output classes are found in app/build/classes/java/main. Therefore, you may
-configure the IDE to run files that are in here, or just rin this in the
-terminal:
+Since this project uses gradle, It would be much easier to run the project
+through the gradle wrapper script.
+
+on Linux:
 ```
-java -cp app/build/classes/java/main/ com.webserver.Main
+./gradlew run
 ```
 
+on Windows:
+```
+gradle.bat run
+```
 ---
 
 ## Totally Valid Questions
