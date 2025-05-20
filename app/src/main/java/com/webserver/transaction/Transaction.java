@@ -38,8 +38,11 @@ public class Transaction {
         Response response = null;
         try {
             JSONObject json = new JSONObject(new JSONTokener(jsonString));
-            initRequest(json);
-            response = processRequest();
+            int validateStatus = initRequest(json);
+            if(validateStatus != 0)
+                response = generateGenericResponse(validateStatus);
+            else
+                response = processRequest();
         } catch (JSONException e){
             Logger.log("BAD REQUEST", LogLevel.WARNING);
             response = generateGenericResponse(BAD_REQUEST);
@@ -48,9 +51,14 @@ public class Transaction {
     }
 
 
-    public void initRequest(JSONObject json){
-        RequestBuilder builder = new RequestBuilder(json);
+    public int initRequest(JSONObject json){
+        RequestBuilder builder = new RequestBuilder();
+        int validateStatus = builder.buildRequest(json);
+        if(validateStatus != 0){
+            return validateStatus;
+        }
         request = builder.getRequest();
+        return 0;
     }
 
     public Response processRequest(){

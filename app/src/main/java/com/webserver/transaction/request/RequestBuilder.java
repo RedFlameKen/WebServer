@@ -9,9 +9,7 @@ public class RequestBuilder {
 
     private Request request;
 
-    public RequestBuilder(JSONObject json){
-        buildRequest(json);
-
+    public RequestBuilder(){
     }
 
     public int buildRequest(JSONObject json){
